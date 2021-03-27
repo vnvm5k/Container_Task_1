@@ -5,62 +5,64 @@ const swordsman = {
   health: 10,
   level: 2,
   attack: 80,
-  defence: 40
+  defence: 40,
 };
 
-const team = [
-  {
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40
-  },
-  {
-    name: 'лучник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40
-  }
-];
-let character = new Team();
-let teams = new Team();
+const bowman = {
+  name: 'лучник',
+  health: 9,
+  level: 1,
+  attack: 70,
+  defence: 30,
+};
+
+const character = new Team();
+const teams = new Team();
 
 test('add', () => {
-
-  let test = character.add(swordsman);
-  expect(test).toEqual({"attack": 80, "defence": 40, "health": 10, "level": 2, "name": "мечник"})
+  character.add(swordsman);
+  expect(character.members.has(swordsman)).toBe(true);
 });
 
 test('addError', () => {
-  let test = character.add(swordsman);
-  expect(test).toThrowError(Error);
+  character.add(swordsman);
+  expect(() => {
+    character.add(swordsman);
+  }).toThrow('Выбранный персонаж уже в команде!');
 });
 
 
 test('addAll', () => {
-
-  let test = teams.addAll(team);
-  expect(test).toEqual({"attack": 80, "defence": 40, "health": 10, "level": 2, "name": "мечник"}, {"attack": 80, "defence": 40, "health": 10, "level": 2, "name": "лучник"});
+  teams.addAll(swordsman, bowman);
+  expect(teams.members.size).toBe(2);
 });
 
+test('addAllError', () => {
+  teams.addAll(swordsman, bowman);
+  expect(() => {
+    teams.addAll(swordsman, bowman);
+  });
+  expect(teams.members.size).toBe(2);
+});
+
+
 test('toArray', () => {
-  let test = teams.toArray();
+  teams.addAll(swordsman, bowman);
+  const test = teams.toArray();
   expect(test).toEqual([
     {
       name: 'мечник',
       health: 10,
       level: 2,
       attack: 80,
-      defence: 40
+      defence: 40,
     },
     {
       name: 'лучник',
-      health: 10,
-      level: 2,
-      attack: 80,
-      defence: 40
-    }
+      health: 9,
+      level: 1,
+      attack: 70,
+      defence: 30,
+    },
   ]);
 });
